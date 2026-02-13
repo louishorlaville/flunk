@@ -8,6 +8,9 @@ import { PlayerForm } from './pages/PlayerForm';
 import { useAuth } from './context/AuthContext';
 
 import { Layout } from './components/Layout';
+import { MatchList } from './pages/MatchList';
+import { MatchForm } from './pages/MatchForm';
+
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
     const { isAuthenticated, isLoading } = useAuth();
@@ -52,6 +55,16 @@ function App() {
                     <Route path="/players/:id/edit" element={
                         <PrivateRoute>
                             <PlayerForm />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/matches" element={
+                        <PrivateRoute>
+                            <MatchList />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/matches/new" element={
+                        <PrivateRoute>
+                            <MatchForm />
                         </PrivateRoute>
                     } />
                 </Routes>

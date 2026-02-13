@@ -16,6 +16,8 @@
         "@types/jsonwebtoken": "^9.0.10",
         "@types/swagger-jsdoc": "^6.0.4",
         "@types/swagger-ui-express": "^4.1.8",
+        "@types/xml2js": "^0.4.14",
+        "axios": "^1.13.5",
         "bcryptjs": "^3.0.3",
         "cors": "^2.8.5",
         "dotenv": "^16.4.1",
@@ -24,6 +26,7 @@
         "jsonwebtoken": "^9.0.3",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-express": "^5.0.1",
+        "xml2js": "^0.6.2",
         "zod": "^3.22.4"
     },
     "devDependencies": {

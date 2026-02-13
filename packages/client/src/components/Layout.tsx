@@ -28,6 +28,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         >
                             Players
                         </Link>
+                        <Link
+                            to="/matches"
+                            className={`${isActive('/matches') ? 'text-blue-600 font-semibold' : 'text-gray-600 hover:text-blue-600'}`}
+                        >
+                            Matches
+                        </Link>
                     </nav>
 
                     <div className="flex items-center gap-4">
