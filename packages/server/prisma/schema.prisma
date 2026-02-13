@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ScoringType {
+  POINTS
+  WIN_LOSE
+  COOP
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password_hash String
+  created_at    DateTime  @default(now())
+  
+  games         Game[]
+  players       Player[]
+}
+
+model Game {
+  id           String      @id @default(uuid())
+  name         String
+  image_url    String?
+  min_players  Int
+  max_players  Int
+  scoring_type ScoringType
+  created_by   String
+  
+  user         User        @relation(fields: [created_by], references: [id])
+  matches      Match[]
+}
+
+model Player {
+  id               String   @id @default(uuid())
+  name             String
+  user_id          String
+  avatar_color     String   @default("#000000")
+  avatar_image_url String?
+  
+  user             User     @relation(fields: [user_id], references: [id])
+  match_participations MatchParticipant[]
+}
+
+model Match {
+  id               String   @id @default(uuid())
+  game_id          String
+  date             DateTime @default(now())
+  duration_minutes Int?
+  notes            String?
+  
+  game             Game     @relation(fields: [game_id], references: [id])
+  participants     MatchParticipant[]
+}
+
+model MatchParticipant {
+  match_id  String
+  player_id String
+  score     Int?
+  is_winner Boolean @default(false)
+  
+  match     Match   @relation(fields: [match_id], references: [id])
+  player    Player  @relation(fields: [player_id], references: [id])
+  
+  @@id([match_id, player_id])
+}
