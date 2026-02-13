@@ -39,7 +39,7 @@ export const PlayerList = () => {
                 <h2 className="text-2xl font-bold">Player Directory</h2>
                 <Link
                     to="/players/new"
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+                    className="bg-flunk-orange text-white px-4 py-2 rounded hover:bg-orange-600 transition"
                 >
                     Add Player
                 </Link>

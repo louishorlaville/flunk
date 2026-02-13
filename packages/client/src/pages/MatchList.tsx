@@ -32,7 +32,7 @@ export const MatchList = () => {
                 <h2 className="text-2xl font-bold">Match History</h2>
                 <Link
                     to="/matches/new"
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                    className="bg-flunk-orange text-white px-4 py-2 rounded hover:bg-orange-600 transition"
                 >
                     Log Match
                 </Link>
@@ -40,31 +40,31 @@ export const MatchList = () => {
 
             <div className="space-y-4">
                 {matches?.map(match => (
-                    <div key={match.id} className="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4 items-start md:items-center">
+                    <div key={match.id} className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 flex flex-col md:flex-row gap-4 items-start md:items-center">
                         <div className="flex items-center gap-3 w-full md:w-1/4">
                             {match.game.image_url ? (
                                 <img src={match.game.image_url} alt={match.game.name} className="w-12 h-12 rounded object-cover" />
                             ) : (
-                                <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xs">No Img</div>
+                                <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">No Img</div>
                             )}
                             <div>
-                                <h3 className="font-bold">{match.game.name}</h3>
-                                <span className="text-sm text-gray-500">{new Date(match.date).toLocaleDateString()}</span>
+                                <h3 className="font-bold text-flunk-blue">{match.game.name}</h3>
+                                <span className="text-sm text-gray-400">{new Date(match.date).toLocaleDateString()}</span>
                             </div>
                         </div>
 
                         <div className="flex-1 w-full overflow-x-auto">
                             <div className="flex gap-4">
                                 {match.participants.map((p, idx) => (
-                                    <div key={idx} className={`flex items-center gap-2 px-3 py-1 rounded-full border ${p.is_winner ? 'bg-yellow-50 border-yellow-200' : 'bg-gray-50 border-gray-200'}`}>
-                                        <div className="w-6 h-6 rounded-full text-white flex items-center justify-center text-xs" style={{ backgroundColor: p.player.avatar_color }}>
+                                    <div key={idx} className={`flex items-center gap-2 px-3 py-1 rounded-full border ${p.is_winner ? 'bg-orange-50 border-orange-200' : 'bg-gray-50 border-gray-100'}`}>
+                                        <div className="w-6 h-6 rounded-full text-white flex items-center justify-center text-xs shadow-sm" style={{ backgroundColor: p.player.avatar_color }}>
                                             {p.player.name[0]}
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className={`text-sm font-medium ${p.is_winner ? 'text-yellow-700' : 'text-gray-700'}`}>{p.player.name}</span>
-                                            <span className="text-xs text-gray-500">{p.score} pts</span>
+                                            <span className={`text-sm font-medium ${p.is_winner ? 'text-flunk-orange' : 'text-gray-600'}`}>{p.player.name}</span>
+                                            <span className="text-xs text-gray-400">{p.score} pts</span>
                                         </div>
-                                        {p.is_winner && <span className="text-yellow-500">👑</span>}
+                                        {p.is_winner && <span className="text-flunk-orange">👑</span>}
                                     </div>
                                 ))}
                             </div>

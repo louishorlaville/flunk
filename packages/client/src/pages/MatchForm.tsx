@@ -1,18 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateMatchDto, CreateMatchSchema, Game, Player } from '@flunk/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import api from '../api/axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export const MatchForm = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const preSelectedGameId = searchParams.get('gameId');
+
     const queryClient = useQueryClient();
     const [selectedGame, setSelectedGame] = useState<Game | null>(null);
 
     // Fetch Games and Players
-    const { data: games } = useQuery<Game[]>({ queryKey: ['games'], queryFn: async () => (await api.get('/games')).data });
+    const { data: games, isSuccess: gamesLoaded } = useQuery<Game[]>({ queryKey: ['games'], queryFn: async () => (await api.get('/games')).data });
     const { data: players } = useQuery<Player[]>({ queryKey: ['players'], queryFn: async () => (await api.get('/players')).data });
 
     const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<CreateMatchDto>({
@@ -22,6 +25,17 @@ export const MatchForm = () => {
             participants: []
         }
     });
+
+    // Auto-select game from URL
+    useEffect(() => {
+        if (gamesLoaded && games && preSelectedGameId) {
+            const game = games.find(g => g.id === preSelectedGameId);
+            if (game) {
+                setSelectedGame(game);
+                setValue('gameId', game.id);
+            }
+        }
+    }, [games, gamesLoaded, preSelectedGameId, setValue]);
 
     const { fields, append, remove } = useFieldArray({
         control,
@@ -167,7 +181,7 @@ export const MatchForm = () => {
                         <div className="flex justify-end pt-4">
                             <button
                                 type="submit"
-                                className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition"
+                                className="bg-flunk-orange text-white px-6 py-2 rounded hover:bg-orange-600 transition"
                             >
                                 Save Match
                             </button>
