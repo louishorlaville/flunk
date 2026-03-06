@@ -1,7 +1,6 @@
+> [!WARNING] This project is currently under active development. Features and functionality may change.
 # Flunk
 
-> [!WARNING]
-> This project is currently under active development. Features and functionality may change.
 
 A full-stack monorepo application for managing and visualising game statistics.
 
