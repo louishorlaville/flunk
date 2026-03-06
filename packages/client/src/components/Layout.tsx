@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 const GameIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 2.325 2.325 0 01-1.745-1.543l-1.005-2.516a.75.75 0 00-1.398 0l-1.006 2.516a2.324 2.324 0 01-1.745 1.543.64.64 0 01-.657-.643v0c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0c0 .733.402 1.383 1 .917V19.5a3 3 0 003 3h3a3 3 0 003-3V6.626c.96.166 1.632.748 1.632 1.712v0a.64.64 0 01-.657.643 2.325 2.325 0 01-1.745-1.543l-1.005-2.516a.75.75 0 00-1.398 0l-1.006 2.516a2.324 2.324 0 01-1.745 1.543.64.64 0 01-.657-.643v0z" /></svg>;
 const PlayerIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>;
 const MatchIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0V9.499a2.25 2.25 0 00-2.25-2.25H11.25a2.25 2.25 0 00-2.25 2.25v5.876m5.006 0H8.995" /></svg>;
+const StatsIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" /></svg>;
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
     const { logout, user } = useAuth();
@@ -55,27 +56,27 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 <div className="container mx-auto px-4 h-20 flex justify-between items-end pb-0 relative">
                     <div className="flex items-center gap-2 pb-4 self-center">
                         <Link to="/">
-                            <img src="/assets/logo.png" alt="Flunk" className="h-10 w-auto object-contain" />
+                            <img src="/assets/logo.png" alt="Flunk" className="h-16 w-auto object-contain" />
                         </Link>
                     </div>
 
                     {/* Desktop Nav */}
                     <nav ref={navRef} className="hidden md:flex space-x-8 h-10 relative">
-                        {['/', '/players', '/matches'].map((path) => (
+                        {['/', '/players', '/matches', '/dashboard'].map((path) => (
                             <Link
                                 key={path}
                                 to={path}
                                 className={`font-medium pb-4 px-2 relative transition-colors z-10 ${isActive(path) ? 'text-flunk-blue' : 'text-gray-500 hover:text-flunk-blue'
                                     }`}
                             >
-                                {path === '/' ? 'Collection' : path === '/players' ? 'Players' : 'Matches'}
+                                {path === '/' ? 'Collection' : path === '/players' ? 'Players' : path === '/matches' ? 'Matches' : 'Stats'}
                             </Link>
                         ))}
                         {/* Sliding Indicator */}
                         <span
                             className="absolute bottom-0 h-1 bg-flunk-orange rounded-t-sm transition-all duration-300 ease-in-out"
                             style={{
-                                left: indicatorStyle.left,
+                                left: indicatorStyle.left - 30,
                                 width: indicatorStyle.width,
                                 opacity: indicatorStyle.opacity
                             }}
@@ -109,6 +110,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 <NavItem to="/" icon={<GameIcon />} label="Games" />
                 <NavItem to="/players" icon={<PlayerIcon />} label="Players" />
                 <NavItem to="/matches" icon={<MatchIcon />} label="Matches" />
+                <NavItem to="/dashboard" icon={<StatsIcon />} label="Stats" />
             </nav>
         </div>
     );

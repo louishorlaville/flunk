@@ -10,6 +10,7 @@ import { useAuth } from './context/AuthContext';
 import { Layout } from './components/Layout';
 import { MatchList } from './pages/MatchList';
 import { MatchForm } from './pages/MatchForm';
+import { Dashboard } from './pages/Dashboard';
 
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
@@ -65,6 +66,11 @@ function App() {
                     <Route path="/matches/new" element={
                         <PrivateRoute>
                             <MatchForm />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/dashboard" element={
+                        <PrivateRoute>
+                            <Dashboard />
                         </PrivateRoute>
                     } />
                 </Routes>

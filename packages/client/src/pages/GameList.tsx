@@ -7,7 +7,21 @@ import { useState } from 'react';
 export const GameList = () => {
     const queryClient = useQueryClient();
     const [searchQuery, setSearchQuery] = useState('');
-    const [showSortMenu, setShowSortMenu] = useState(false); // To implement sorting logic later
+    const [showSortMenu, setShowSortMenu] = useState(false);
+
+    type SortOption = 'name' | 'min_players' | 'max_players' | 'scoring_type';
+    const [sortBy, setSortBy] = useState<SortOption>('name');
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+    const handleSort = (option: SortOption) => {
+        if (sortBy === option) {
+            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(option);
+            setSortOrder('asc');
+        }
+        setShowSortMenu(false);
+    };
 
     const { data: games, isLoading, error } = useQuery<Game[]>({
         queryKey: ['games'],
@@ -28,7 +42,24 @@ export const GameList = () => {
 
     const filteredGames = games?.filter(game =>
         game.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    ).sort((a, b) => {
+        let comparison = 0;
+        switch (sortBy) {
+            case 'name':
+                comparison = a.name.localeCompare(b.name);
+                break;
+            case 'min_players':
+                comparison = (a.min_players || 0) - (b.min_players || 0);
+                break;
+            case 'max_players':
+                comparison = (a.max_players || 0) - (b.max_players || 0);
+                break;
+            case 'scoring_type':
+                comparison = a.scoring_type.localeCompare(b.scoring_type);
+                break;
+        }
+        return sortOrder === 'asc' ? comparison : -comparison;
+    });
 
     if (isLoading) return <div className="text-center p-4">Loading games...</div>;
     if (error) return <div className="text-center text-red-500 p-4">Error loading games</div>;
@@ -56,12 +87,50 @@ export const GameList = () => {
                 </div>
 
                 {/* Sort Button */}
-                <button
-                    onClick={() => setShowSortMenu(!showSortMenu)}
-                    className="p-2 rounded-full hover:bg-gray-100 transition"
-                >
-                    <img src="/assets/sort.png" alt="Sort" className="w-6 h-6 object-contain" />
-                </button>
+                <div className="relative">
+                    <button
+                        onClick={() => setShowSortMenu(!showSortMenu)}
+                        className="p-2 rounded-full hover:bg-gray-100 transition flex items-center gap-1"
+                    >
+                        <img src="/assets/sort.png" alt="Sort" className="w-8 h-8 object-contain" />
+                        {/* Sort Direction Indicator */}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className={`w-4 h-4 text-flunk-orange transition-transform duration-200 ${sortOrder === 'desc' ? 'rotate-180' : ''}`}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
+                        </svg>
+                    </button>
+
+                    {/* Sort Menu Dropdown */}
+                    {showSortMenu && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-100 ring-1 ring-black ring-opacity-5">
+                            {[
+                                { label: 'Name', value: 'name' },
+                                { label: 'Min Players', value: 'min_players' },
+                                { label: 'Max Players', value: 'max_players' },
+                                { label: 'Scoring Type', value: 'scoring_type' }
+                            ].map((option) => (
+                                <button
+                                    key={option.value}
+                                    onClick={() => handleSort(option.value as SortOption)}
+                                    className={`block w-full text-left px-4 py-2 text-sm ${sortBy === option.value ? 'bg-orange-50 text-flunk-orange font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                >
+                                    {option.label}
+                                    {sortBy === option.value && (
+                                        <span className="ml-2 text-xs opacity-70">
+                                            ({sortOrder === 'asc' ? 'Asc' : 'Desc'})
+                                        </span>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
 
 
